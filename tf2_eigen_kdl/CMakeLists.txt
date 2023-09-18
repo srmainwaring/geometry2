@@ -16,7 +16,12 @@ if(NOT Eigen3_FOUND)
   find_package(Eigen3 REQUIRED)
 endif()
 find_package(orocos_kdl_vendor REQUIRED)
-find_package(orocos_kdl REQUIRED)
+find_package(orocos_kdl
+  REQUIRED
+  CONFIG
+  PATHS
+  /opt/homebrew/opt/orocos-kdl/share/orocos_kdl/cmake
+)
 find_package(tf2 REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
@@ -34,6 +39,11 @@ if(TARGET Eigen3::Eigen)
 else()
   target_include_directories(${PROJECT_NAME} PUBLIC ${Eigen3_INCLUDE_DIRS})
 endif()
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+  ${orocos_kdl_INCLUDE_DIRS}
+)
 
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
